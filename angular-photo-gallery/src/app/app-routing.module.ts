@@ -16,6 +16,11 @@ const routes: Routes = [
   {
     path: 'photos/:id',
     component: PhotoPreviewComponent
+  },
+  {
+    path: '',
+    redirectTo: '/photos',
+    pathMatch: 'full'
   }
 ];
 
