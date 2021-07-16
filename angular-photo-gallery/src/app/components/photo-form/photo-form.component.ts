@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router'
+import {PhotoService} from '../../services/photo.service'
 
 interface HtmlInputEvent extends Event {
-  target: HTMLInputElement & EventTarget
+  target: HTMLInputElement & EventTarget;
 }
 
 @Component({
@@ -11,15 +13,16 @@ interface HtmlInputEvent extends Event {
 })
 export class PhotoFormComponent implements OnInit {
 
-  file: File;
   photoSelected: string | ArrayBuffer;
+  file: File;
 
-  constructor() { }
+  constructor(private photoService: PhotoService, private router: Router) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
+
   onPhotoSelected(event: HtmlInputEvent): void {
-    if(event.target.files && event.target.files[0]) {
+    if (event.target.files && event.target.files[0]) {
       this.file = <File>event.target.files[0];
       // image preview
       const reader = new FileReader();
@@ -28,9 +31,17 @@ export class PhotoFormComponent implements OnInit {
     }
   }
 
-  uploadPhoto(title: HTMLInputElement, description: HTMLTextAreaElement): boolean {
-    console.log(title.value)
-    console.log(description.value)
-    return false
+  uploadPhoto(title: HTMLInputElement, description: HTMLTextAreaElement) {
+    this.photoService
+      .createPhoto(title.value, description.value, this.file)
+      .subscribe(
+        res => {
+          console.log(res);
+          this.router.navigate(['/photos'])
+        },
+        err => console.log(err)
+      );
+    return false;
   }
+
 }
