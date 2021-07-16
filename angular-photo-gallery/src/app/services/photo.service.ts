@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 
+import {Photo} from '../interfaces/Photo'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,5 +18,9 @@ export class PhotoService {
     fd.append('description', description);
     fd.append('image', photo);
     return this.http.post(this.URI, fd);
+  }
+
+  getPhotos() {
+    return this.http.get<Photo[]>(this.URI);
   }
 }
